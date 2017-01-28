@@ -14,9 +14,13 @@ public class CanvasPositionHandler : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        instance = this;
         mDrawer = GetComponent<DrawOnMesh>();
 	}
+
+    private void Awake()
+    {
+        instance = this;
+    }
 
     public static CanvasPositionHandler GetInstance() {
         return instance;

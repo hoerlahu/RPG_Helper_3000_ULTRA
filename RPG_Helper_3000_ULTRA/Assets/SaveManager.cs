@@ -15,14 +15,18 @@ public class SaveManager : MonoBehaviour {
     public static SaveManager GetInstance() {
         return instance;
     }
+    private void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
-        instance = this;
-        saveableObjects = new List<ISaveable>();
+        if (saveableObjects == null) saveableObjects = new List<ISaveable>();
     }
 
     public void RegisterSaveableObject(ISaveable saveable) {
+        if (saveableObjects == null) saveableObjects = new List<ISaveable>();
         saveableObjects.Add(saveable);
     }
 
@@ -39,6 +43,9 @@ public class SaveManager : MonoBehaviour {
         {
             saveable.Load(xmlDoc);
         }
+
+        DrawOnMesh.GetInstance().SetDirty();
+
     }
 
 

@@ -14,11 +14,14 @@ public class DrawOnMesh : MonoBehaviour {
     public static DrawOnMesh GetInstance() {
         return mInstance;
     }
-    
+
+    private void Awake()
+    {
+        mInstance = this;
+    }
+
     // Use this for initialization
     void Start () {
-
-        mInstance = this;
 
         mColorProvider = GetComponent<ColorProvider>();
 
