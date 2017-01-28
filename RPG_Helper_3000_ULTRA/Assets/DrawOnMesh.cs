@@ -1,29 +1,62 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DrawOnMesh : MonoBehaviour {
 
-	ColorProvider l_colorProvider;
+    private ColorProvider mColorProvider;
 
-	// Use this for initialization
-	void Start () {
+    private bool mDirty = true;
 
-		Texture2D texture = new Texture2D(Screen.currentResolution.width, Screen.currentResolution.height);
-		GetComponent<Renderer>().material.mainTexture = texture;
+    private static DrawOnMesh mInstance;
 
-		for (int y = 0; y < texture.height; y++) {
-			for (int x = 0; x < texture.width; x++) {
-				Color color = ((x & y) != 0 ? Color.red : Color.green);
-				texture.SetPixel(x, y, color);
-			}
-		}
-		texture.Apply();
+    public static DrawOnMesh GetInstance() {
+        return mInstance;
+    }
+    
+    // Use this for initialization
+    void Start () {
+
+        mInstance = this;
+
+        mColorProvider = GetComponent<ColorProvider>();
 
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (mDirty)
+        {
+            Redraw();
+            mDirty = false;
+        }
+    }
+
+    private void Redraw()
+    {   
+        
+
+        Texture2D texture = new Texture2D(Screen.width, Screen.height);
+        GetComponent<Renderer>().material.mainTexture = texture;
+
+        Color[] colors = new Color[texture.width * texture.height];
+
+        for (int y = 0; y < texture.height; ++y)
+        {
+            for (int x = 0; x < texture.width; ++x)
+            {
+                colors[x + texture.width * y] = mColorProvider.getColorForPixel(x, y);
+            }
+        }
+        texture.SetPixels(colors);
+        texture.Apply();
+    }
+
+    public void SetDirty()
+    {
+        mDirty = true;
+    }
 }
