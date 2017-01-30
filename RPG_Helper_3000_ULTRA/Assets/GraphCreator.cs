@@ -66,13 +66,16 @@ public class GraphCreator : MonoBehaviour {
             Vector3 late = pointsInGraph[i].GetComponent<PointInNewGraph>().GetPositionWhenCreated();
 
             Vector3 vec = late - early;
-            Vector3 perp = Vector3.Cross(vec, Vector3.forward);
+            Vector3 perp = new Vector3(vec.y, -vec.x);
+            perp.Normalize();
 
             l_graph[0] = early + roadWidth * perp;
             l_graph[3] = early - roadWidth * perp;
 
             vec = early - late;
-            perp = Vector3.Cross(vec, Vector3.forward);
+            //perp = Vector3.Cross(vec, Vector3.forward);
+            perp = new Vector3(vec.y, -vec.x);
+            perp.Normalize();
 
             l_graph[2] = late + roadWidth * perp;
             l_graph[1] = late - roadWidth * perp;
@@ -83,7 +86,7 @@ public class GraphCreator : MonoBehaviour {
             newGraphs.Add(l_graph);
         }
 
-        for (int i = 0, j = 1; i < newGraphs.Count - 1; j = i++) {
+        for (int i = 0, j = 1; i < newGraphs.Count - 1; i = j++) {
             Vector3[] l_graph = new Vector3[5];
 
             l_graph[0] = newGraphs[i][1];
