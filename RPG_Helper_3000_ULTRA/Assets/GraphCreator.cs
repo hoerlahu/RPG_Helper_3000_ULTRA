@@ -13,13 +13,19 @@ public class GraphCreator : MonoBehaviour {
     public bool draw;
     public GraphManager.GraphTypes typeToDraw;
     public KeyCode hotkeyToggleDrawing;
+    public KeyCode hotkeyAbortDrawing;
 
-	
-	void Update () {
+
+    void Update () {
 
         if (Input.GetKeyDown(hotkeyToggleDrawing))
         {
             draw = !draw;
+        }
+
+        if (Input.GetKeyDown(hotkeyAbortDrawing))
+        {
+            RemoveGraphElements();
         }
 
     }
@@ -45,15 +51,20 @@ public class GraphCreator : MonoBehaviour {
         }
         l_graph[l_graph.Length - 1] = pointsInGraph[0].GetComponent<PointInNewGraph>().GetPositionWhenCreated();
 
-        for (int i = 0; i < pointsInGraph.Count; ++i)
-        {
-            Destroy(pointsInGraph[i]);
-        }
+        RemoveGraphElements();
 
         GraphManager.GetInstance().AddNewGraph(l_graph, typeToDraw);
 
         DrawOnMesh.GetInstance().SetDirty();
+        
+    }
 
+    private void RemoveGraphElements()
+    {
+        for (int i = 0; i < pointsInGraph.Count; ++i)
+        {
+            Destroy(pointsInGraph[i]);
+        }
         pointsInGraph = new List<GameObject>();
     }
 

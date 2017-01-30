@@ -77,9 +77,13 @@
   <ItemGroup>
     <Compile Include="Assets\CanvasPositionHandler.cs" />
     <Compile Include="Assets\ColorProvider.cs" />
+    <Compile Include="Assets\DoubleClickReceiver.cs" />
+    <Compile Include="Assets\DragableItem.cs" />
     <Compile Include="Assets\DrawOnMesh.cs" />
     <Compile Include="Assets\GraphCreator.cs" />
     <Compile Include="Assets\GraphManager.cs" />
+    <Compile Include="Assets\IDoubleClickReceiver.cs" />
+    <Compile Include="Assets\IDragable.cs" />
     <Compile Include="Assets\ISaveable.cs" />
     <Compile Include="Assets\PointInNewGraph.cs" />
     <Compile Include="Assets\SaveManager.cs" />

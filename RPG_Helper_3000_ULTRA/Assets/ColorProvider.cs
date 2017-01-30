@@ -8,14 +8,6 @@ public class ColorProvider : MonoBehaviour {
     public Color m_grass;
     public Color m_wood;
 
-    private CanvasPositionHandler m_CanvasPositionHandler;
-
-    void Start()
-    {
-        m_CanvasPositionHandler = GetComponent<CanvasPositionHandler>();
-    }
-
-
     public Color getColorForPixel(int x, int y) {
         Vector2 l_mapLocation = GetMapLocationForPixel(x, y);
         
@@ -56,7 +48,7 @@ public class ColorProvider : MonoBehaviour {
 
     private Vector2 GetMapLocationForPixel(int x, int y)
     {
-        return m_CanvasPositionHandler.position + new Vector2(x,y);
+        return CanvasPositionHandler.GetInstance().position + new Vector2(x,y);
     }
 
     private bool IsPointInPolygon(int nvert, float[] vertx, float[] verty, float testx, float testy)

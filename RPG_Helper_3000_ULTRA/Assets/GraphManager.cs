@@ -28,14 +28,15 @@ public class GraphManager : MonoBehaviour, ISaveable {
         return instance;
     }
 
-    void Awake()
-    {
+    public GraphManager() {
+        if (instance != null) {
+            throw new System.SystemException();
+        }
         instance = this;
     }
 
-	// Use this for initialization
-	void Start () {
-    
+    // Use this for initialization
+    void Start () {
 
         graphs = new Dictionary<GraphTypes, List<Vector3[]>>();
 

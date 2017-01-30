@@ -11,13 +11,14 @@ public class DrawOnMesh : MonoBehaviour {
 
     private static DrawOnMesh mInstance;
 
-    public static DrawOnMesh GetInstance() {
-        return mInstance;
+    public DrawOnMesh()
+    {
+        if (mInstance != null) throw new System.SystemException();
+        mInstance = this;
     }
 
-    private void Awake()
-    {
-        mInstance = this;
+    public static DrawOnMesh GetInstance() {
+        return mInstance;
     }
 
     // Use this for initialization

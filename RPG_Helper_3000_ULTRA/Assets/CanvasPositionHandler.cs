@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CanvasPositionHandler : MonoBehaviour {
+public class CanvasPositionHandler : MonoBehaviour, IDragable {
 
     public Vector2 position { get; private set; }
-
-    private Vector2 initialMousePosition;
 
     private static CanvasPositionHandler instance;
 
@@ -14,11 +12,12 @@ public class CanvasPositionHandler : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
+        GetComponent<DragableItem>().AddListener(this);
         mDrawer = GetComponent<DrawOnMesh>();
 	}
 
-    private void Awake()
-    {
+    public CanvasPositionHandler() {
+        if (instance != null) throw new System.SystemException();
         instance = this;
     }
 
@@ -26,24 +25,10 @@ public class CanvasPositionHandler : MonoBehaviour {
         return instance;
     }
 
-    private void OnMouseDown()
+    public void OnDrag(Vector2 screen, Vector2 world)
     {
-        initialMousePosition = Input.mousePosition;
-    }
-
-    void OnMouseDrag()
-    {
-        position = position - new Vector2(Input.mousePosition.x - initialMousePosition.x, Input.mousePosition.y - initialMousePosition.y);
-        initialMousePosition = Input.mousePosition;
-
+        position -= screen;
         mDrawer.SetDirty();
-
-        Debug.Log(position);
-
     }
-
-    private void OnMouseUp()
-    {
-        initialMousePosition = default(Vector2);
-    }
+    
 }
