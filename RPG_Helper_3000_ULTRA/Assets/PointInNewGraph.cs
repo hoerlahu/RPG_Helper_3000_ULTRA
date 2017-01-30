@@ -9,6 +9,8 @@ public class PointInNewGraph : MonoBehaviour, IDragable, IDoubleClickReceiver {
 
     private Vector3 positionWhenCreated;
 
+    public Material highlightMaterial;
+
     private void Start()
     {
         GetComponent<DragableItem>().AddListener(this);
@@ -33,5 +35,10 @@ public class PointInNewGraph : MonoBehaviour, IDragable, IDoubleClickReceiver {
     public void OnDrag(Vector2 draggedDistanceScreen, Vector2 draggedDistanceWorld)
     {
         transform.position = transform.position + (Vector3)draggedDistanceWorld;
+    }
+
+    internal void Highlight()
+    {
+        GetComponent<Renderer>().material = highlightMaterial;
     }
 }

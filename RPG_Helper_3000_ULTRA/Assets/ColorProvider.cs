@@ -5,8 +5,15 @@ using UnityEngine;
 
 public class ColorProvider : MonoBehaviour {
 
-    public Color m_grass;
-    public Color m_wood;
+    [Serializable]
+    public struct ColorToGraphType {
+        public GraphManager.GraphTypes graphType;
+        public Color color;
+    }
+
+    public ColorToGraphType[] colorForGraphType;
+
+    public Color defaultColor;
 
     public Color getColorForPixel(int x, int y) {
         Vector2 l_mapLocation = GetMapLocationForPixel(x, y);
@@ -16,12 +23,24 @@ public class ColorProvider : MonoBehaviour {
 
     private Color GetColorForMapLocation(Vector2 mapLocation)
     {
+        foreach (ColorToGraphType ctg in colorForGraphType)
+        {
+            if (PointIsInGraphOfType(ctg.graphType, mapLocation))
+            {
+                return ctg.color;
+            }
+        }
+        return defaultColor;
+    }
 
+    private bool PointIsInGraphOfType(GraphManager.GraphTypes graphType, Vector2 mapLocation)
+    {
         bool pointIsInPolygon = false;
 
-        List<Vector3[]> graphs = GraphManager.GetInstance().GetGraphs(GraphManager.GraphTypes.wood);
+        List<Vector3[]> graphs = GraphManager.GetInstance().GetGraphs(graphType);
 
-        for (int i = 0; i < graphs.Count; ++i) {
+        for (int i = 0; i < graphs.Count; ++i)
+        {
 
             int graphElements = graphs[i].Length;
 
@@ -40,10 +59,8 @@ public class ColorProvider : MonoBehaviour {
             }
 
         }
-        if (pointIsInPolygon == true) {
-            return m_wood;
-        } 
-        return m_grass;
+
+        return pointIsInPolygon;
     }
 
     private Vector2 GetMapLocationForPixel(int x, int y)

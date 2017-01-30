@@ -34,6 +34,14 @@ public class DoubleClickReceiver : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (Time.time - timeOfClick > co_max_time_double_click) {
+            lastClick = Vector3.zero;
+            timeOfClick = 0;
+        }
+    }
+
     protected bool WasDoubleClick(Vector3 click)
     {
 
