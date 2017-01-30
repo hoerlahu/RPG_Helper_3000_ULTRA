@@ -19,6 +19,8 @@ ExportedObj/
 *.booproj
 *.svd
 *.pdb
+RPG_Helper_3000_ULTRA/Library/*/*
+
 
 
 # Unity3D generated meta files
