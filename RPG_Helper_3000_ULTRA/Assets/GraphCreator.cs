@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 
 
-public class GraphCreator : MonoBehaviour {
+public class GraphCreator : MonoBehaviour, IKeyCodeReceiver {
 
     private List<GameObject> pointsInGraph = new List<GameObject>();
 
@@ -14,20 +15,21 @@ public class GraphCreator : MonoBehaviour {
     public GraphManager.GraphTypes typeToDraw;
     public KeyCode hotkeyToggleDrawing;
     public KeyCode hotkeyAbortDrawing;
+    public KeyCode hotkeyCycleStyle;
     public float roadWidth;
 
-    void Update () {
+    private void Start()
+    {
+        KeyManager.GetInstance().registerListener(this, hotkeyToggleDrawing, KeyManager.KeyReceivingImportance.low);
+    }
 
-        if (Input.GetKeyDown(hotkeyToggleDrawing))
+    void OnGUI()
+    {
+        if (draw)
         {
-            draw = !draw;
+            GUI.Box(new Rect(0, 0, 100, 100), GUIContent.none);
+            GUI.Label(new Rect(20, 20, 100, 50), typeToDraw.ToString() );
         }
-
-        if (Input.GetKeyDown(hotkeyAbortDrawing))
-        {
-            RemoveGraphElements();
-        }
-
     }
 
     public void PointWasPressed(PointInNewGraph pointInNewGraph)
@@ -128,6 +130,8 @@ public class GraphCreator : MonoBehaviour {
             Destroy(pointsInGraph[i]);
         }
         pointsInGraph = new List<GameObject>();
+        KeyManager.GetInstance().unregisterListener(this, hotkeyAbortDrawing, KeyManager.KeyReceivingImportance.standard);
+        KeyManager.GetInstance().unregisterListener(this, hotkeyCycleStyle, KeyManager.KeyReceivingImportance.standard);
     }
 
     void OnMouseDown()
@@ -151,5 +155,42 @@ public class GraphCreator : MonoBehaviour {
         if (pointsInGraph.Count == 1) {
             newPoint.GetComponent<PointInNewGraph>().Highlight();
         }
+        KeyManager.GetInstance().registerListener(this, hotkeyAbortDrawing, KeyManager.KeyReceivingImportance.standard);
+        KeyManager.GetInstance().registerListener(this, hotkeyCycleStyle, KeyManager.KeyReceivingImportance.standard);
+    }
+
+    public bool HandlesKeyDown(KeyCode key)
+    {
+        if (key == hotkeyToggleDrawing)
+        {
+            draw = !draw;
+            return true;
+        }
+
+        if (key == hotkeyAbortDrawing)
+        {
+            RemoveGraphElements();
+            return true;
+        }
+
+        if (key == hotkeyCycleStyle) {
+            selectNextStyle();
+            return true;
+        }
+
+        return false;
+    }
+
+    private void selectNextStyle()
+    {
+        GraphManager.GraphTypes[] graphTypes = (GraphManager.GraphTypes[])Enum.GetValues(typeof(GraphManager.GraphTypes));
+        int i = 0;
+        for (; i < graphTypes.Length; ++i) {
+            if (graphTypes[i] == typeToDraw) {
+                break;
+            }
+        }
+        ++i;
+        typeToDraw = graphTypes[i % graphTypes.Length];
     }
 }

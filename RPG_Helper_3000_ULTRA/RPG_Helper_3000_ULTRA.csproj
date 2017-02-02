@@ -84,7 +84,10 @@
     <Compile Include="Assets\GraphManager.cs" />
     <Compile Include="Assets\IDoubleClickReceiver.cs" />
     <Compile Include="Assets\IDragable.cs" />
+    <Compile Include="Assets\IKeyCodeReceiver.cs" />
     <Compile Include="Assets\ISaveable.cs" />
+    <Compile Include="Assets\KeyManager.cs" />
+    <Compile Include="Assets\OptionsManager.cs" />
     <Compile Include="Assets\PointInNewGraph.cs" />
     <Compile Include="Assets\SaveManager.cs" />
     <Compile Include="Assets\ZOrder.cs" />
